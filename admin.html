@@ -932,6 +932,18 @@
 
       const pId = data.id || ('user_' + String(data.name || 'friend').replace(/\s+/g, '_'));
 
+      // Handle SOS EMERGENCY alert from broadcaster
+      if (data.status === 'SOS') {
+        showHostAlert(`🚨 EMERGENCY SOS from "${data.name || 'Friend'}"! Check map immediately!`, 'error');
+        if ('speechSynthesis' in window) {
+          try {
+            const u = new SpeechSynthesisUtterance(`Emergency SOS alert from ${data.name || 'Friend'}`);
+            u.rate = 1.0;
+            window.speechSynthesis.speak(u);
+          } catch(e) {}
+        }
+      }
+
       // Handle STOPPED SHARING / QUIT / ERROR alert from friend
       if (data.status === 'stopped_sharing' || data.status === 'quit' || data.status === 'error') {
         let person = trackedPersons[pId];

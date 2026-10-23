@@ -2,3 +2,6 @@ __pycache__/
 *.pyc
 .system_generated/
 *.log
+locations.json
+history.json
+*.tmp

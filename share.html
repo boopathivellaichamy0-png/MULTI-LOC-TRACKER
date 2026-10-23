@@ -442,6 +442,7 @@
           </svg>
           <span id="btnText">Turn On Continuous GPS</span>
         </button>
+        <button id="btnSOS" onclick="triggerSOS()" style="display: none; background: linear-gradient(135deg, #ef4444, #b91c1c); border: none; color: #fff; border-radius: 16px; padding: 0 14px; font-weight: 800; font-size: 13px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);">🚨 SOS</button>
         <button id="btnStopGPS" onclick="confirmStopSharing()" style="display: none; background: rgba(239, 68, 68, 0.2); border: 1.5px solid #ef4444; color: #f87171; border-radius: 16px; padding: 0 16px; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s;">
           🛑 Stop
         </button>
@@ -451,6 +452,29 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
         <span>📲 Add as Standalone Web App (Never Disconnects)</span>
       </button>
+
+      
+      <!-- NATIVE ANDROID APP DOWNLOAD CARD FOR UNSTOPPABLE BROADCASTING -->
+      <div class="app-download-card" style="margin-top: 14px; background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(16, 185, 129, 0.08)); border: 1.5px solid rgba(34, 197, 94, 0.45); border-radius: 18px; padding: 14px 16px; text-align: left; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 34px; height: 34px; background: rgba(34, 197, 94, 0.25); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px;">📱</div>
+            <div>
+              <div style="font-size: 13px; font-weight: 800; color: #4ade80;">QuantumGPS Broadcaster App</div>
+              <div style="font-size: 11px; color: #a7f3d0;">Official Android APK • Always-On (6.2 MB)</div>
+            </div>
+          </div>
+          <span style="background: rgba(34, 197, 94, 0.25); border: 1px solid rgba(34, 197, 94, 0.4); color: #86efac; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 999px; text-transform: uppercase;">Immortal</span>
+        </div>
+        <p style="font-size: 11px; color: #d1fae5; line-height: 1.4; margin-bottom: 12px;">
+          ⚡ <b>For 100% Reliable Live Broadcast:</b> Broadcasts with <b>screen locked</b>, never disconnects in pocket, survives phone restart.
+        </p>
+        <a id="btnDownloadAPK" href="/QuantumGPS-Tracker.apk" download="QuantumGPS-Tracker.apk" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 13px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; text-decoration: none; border-radius: 14px; font-size: 13px; font-weight: 800; box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45); cursor: pointer;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>📥 Download Live Broadcast App (.APK)</span>
+        </a>
+      </div>
+
 
       <!-- 1-TAP DIRECTIONAL NUDGE & CALIBRATION PAD -->
       <div class="calibrate-box">
@@ -782,6 +806,9 @@
       document.getElementById('btnText').innerText = "Resume Continuous GPS";
       const stopBtn = document.getElementById('btnStopGPS');
       if (stopBtn) stopBtn.style.display = 'none';
+      const sosBtn = document.getElementById('btnSOS');
+      if (sosBtn) sosBtn.style.display = 'none';
+      localStorage.removeItem('antigravity_was_sharing');
 
       if (notifyHost) {
         notifyHostStopOrError('stopped_sharing', reason);
@@ -837,6 +864,9 @@
       document.getElementById('btnText').innerText = "✓ Continuous GPS Live (1s)";
       const stopBtn = document.getElementById('btnStopGPS');
       if (stopBtn) stopBtn.style.display = 'block';
+      const sosBtn = document.getElementById('btnSOS');
+      if (sosBtn) sosBtn.style.display = 'block';
+      localStorage.setItem('antigravity_was_sharing', 'true');
       document.getElementById('telemetryGrid').style.display = 'grid';
 
       if (liveIntervalId) clearInterval(liveIntervalId);
@@ -933,7 +963,9 @@
     document.getElementById('btnTurnOnGPS').addEventListener('click', activateGPS);
 
     window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(activateGPS, 300);
+      if (localStorage.getItem('antigravity_was_sharing') === 'true') {
+        setTimeout(activateGPS, 500);
+      }
     });
   </script>
 </body>
